@@ -13,12 +13,14 @@ using SDKTemplate;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.Foundation;
 using Windows.Globalization;
 using Windows.Graphics.Imaging;
 using Windows.Media.Ocr;
 using Windows.Storage;
 using Windows.Storage.Pickers;
+using Windows.Storage.Streams;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -66,7 +68,6 @@ namespace SDKTemplate
                 // Check if any OCR language is available on device.
                 if (OcrEngine.AvailableRecognizerLanguages.Count > 0)
                 {
-                    LanguageList.DisplayMemberPath = "DisplayName";
                     LanguageList.ItemsSource = OcrEngine.AvailableRecognizerLanguages;
                     LanguageList.SelectedIndex = 0;
                     LanguageList.IsEnabled = true;
@@ -100,6 +101,25 @@ namespace SDKTemplate
         private async Task LoadImageAsync(StorageFile file)
         {
             using (var stream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read))
+            {
+                var decoder = await BitmapDecoder.CreateAsync(stream);
+
+                bitmap = await decoder.GetSoftwareBitmapAsync(BitmapPixelFormat.Bgra8, BitmapAlphaMode.Premultiplied);
+
+                var imgSource = new WriteableBitmap(bitmap.PixelWidth, bitmap.PixelHeight);
+                bitmap.CopyToBuffer(imgSource.PixelBuffer);
+                PreviewImage.Source = imgSource;
+            }
+        }
+
+        /// <summary>
+        /// Loads image from stream to bitmap and displays it in UI.
+        /// </summary>
+        /// <param name="imageStream"></param>
+        /// <returns></returns>
+        private async Task LoadImageAsync(IRandomAccessStreamReference imageStream)
+        {
+            using (var stream = await imageStream.OpenReadAsync())
             {
                 var decoder = await BitmapDecoder.CreateAsync(stream);
 
@@ -291,6 +311,34 @@ namespace SDKTemplate
 
                 rootPage.NotifyUser(
                     String.Format("Loaded image from file: {0} ({1}x{2}).", file.Name, bitmap.PixelWidth, bitmap.PixelHeight),
+                    NotifyType.StatusMessage);
+            }
+        }
+
+        /// <summary>
+        /// This is event handler for 'Paste' button.
+        /// It reads the image from clipblard and pastes in UI..
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void PasteButton_Click(object sender, RoutedEventArgs e)
+        {
+            var dataPackageView = Clipboard.GetContent();
+            IRandomAccessStreamReference imageStreamReceived = null;
+
+            if (dataPackageView.Contains(StandardDataFormats.Bitmap))
+            {
+                imageStreamReceived = await dataPackageView.GetBitmapAsync();
+            }
+
+            if (imageStreamReceived != null)
+            {
+                ClearResults();
+
+                await LoadImageAsync(imageStreamReceived);
+
+                rootPage.NotifyUser(
+                    String.Format("Pasted image from: {0} ({1}x{2}).", "clipboard", bitmap.PixelWidth, bitmap.PixelHeight),
                     NotifyType.StatusMessage);
             }
         }
