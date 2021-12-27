@@ -43,7 +43,7 @@ Scenario 1: Load image from a file and extract text in user specified language.
 2. Get list of all available OCR languages on device.
 3. Create OCR recognizer for specific language.
 4. Create OCR recognizer for the first OCR supported language from GlobalizationPreferences.Languages list.
-5. Load image from a file and extract text.
+5. Load image from a file or clipboard and extract text.
 6. Overlay word bounding boxes over displayed image.
 7. Differentiate vertical and horizontal text lines.
 

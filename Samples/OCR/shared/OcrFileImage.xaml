@@ -58,7 +58,7 @@
                         <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Text="User Language"/>
                         <ToggleSwitch VerticalAlignment="Center" Margin="20,0,0,0" x:Name="UserLanguageToggle" IsOn="False" Toggled="UserLanguageToggle_Toggled" />
                     </StackPanel>
-                    <ComboBox Name="LanguageList" Width="200" Margin="0, 0, 0, 5" SelectionChanged="LanguageList_SelectionChanged" HorizontalAlignment="Left"/>
+                    <ComboBox Name="LanguageList" Width="200" Margin="0, 0, 0, 5" SelectionChanged="LanguageList_SelectionChanged" HorizontalAlignment="Left" DisplayMemberPath="DisplayName"/>
                     <Grid x:Name="Image" Margin="0,0,0,5">
                         <Image x:Name="PreviewImage" HorizontalAlignment="Left" VerticalAlignment="Top" SizeChanged="PreviewImage_SizeChanged" MaxWidth="600"/>
                         <Grid x:Name="TextOverlay" HorizontalAlignment="Left" VerticalAlignment="Top" />
@@ -72,6 +72,11 @@
                         <Button Name="LoadButton" Margin="0, 0, 5, 0" Click="LoadButton_Click">
                             <Viewbox MaxHeight="40" MaxWidth="40">
                                 <SymbolIcon Symbol="OpenFile"/>
+                            </Viewbox>
+                        </Button>
+                        <Button Name="PasteButton" Margin="0, 0, 5, 0" Click="PasteButton_Click">
+                            <Viewbox MaxHeight="40" MaxWidth="40">
+                                <SymbolIcon Symbol="Paste"/>
                             </Viewbox>
                         </Button>
                         <Button Name="ExtractButton" Margin="0, 0, 5, 0" Click="ExtractButton_Click">
