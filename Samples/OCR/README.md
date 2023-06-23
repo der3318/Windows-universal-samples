@@ -63,6 +63,7 @@ Scenario 2: Capture image from camera and extract text.
 [Language matching](https://msdn.microsoft.com/library/windows/apps/jj673578.aspx)  
 [Windows.Graphics.Imaging.BitmapDecoder class](https://msdn.microsoft.com/library/windows/apps/windows.graphics.imaging.bitmapdecoder.aspx)  
 [Windows.Media.Capture.MediaCapture namespace](https://msdn.microsoft.com/library/windows/apps/windows.media.capture.aspx)  
+[ZXing.Net library](https://github.com/micjahn/ZXing.Net)  
 
 ### Related samples
 

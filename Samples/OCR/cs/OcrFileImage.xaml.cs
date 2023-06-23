@@ -170,6 +170,18 @@ namespace SDKTemplate
                 return;
             }
 
+            // Check if barcode reader extract something.
+            ZXing.SoftwareBitmapLuminanceSource luminanceSource = new ZXing.SoftwareBitmapLuminanceSource(bitmap);
+            ZXing.IBarcodeReader barcodeReader = new ZXing.BarcodeReader();
+            ZXing.Result barcodeResult = barcodeReader.Decode(luminanceSource);
+            if (barcodeResult != null)
+            {
+                ExtractedTextBox.Text = barcodeResult.Text;
+                rootPage.NotifyUser("Image is a " + barcodeResult.BarcodeFormat.ToString() + ".", NotifyType.StatusMessage);
+
+                return;
+            }
+
             OcrEngine ocrEngine = null;
 
             if (UserLanguageToggle.IsOn)
